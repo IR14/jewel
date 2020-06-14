@@ -72,6 +72,63 @@ def wax_weight():
     print('\nМасса металла, требуемая на определенную восковку:', '%.2f' % (wax * elements['weight'][elements['code'].index(element)]))
     return (wax * elements['weight'][elements['code'].index(element)]) # о да, сама гениальность
 
+
+    def wire():
+    """
+    Ввод с клавиатруы:
+    1. Выбор сечения
+    2. Ввод массы
+    3. Выбор материала
+    4. Ввод двух известных параметров (длина, ширина, высота) будущей проволки.
+    Возвращает максимально возможную длину проволоки(квадратного, круглого сечения) в том же материале.
+    (Длина l, Ширина b; высота h, плотоность указана в г/см^3)
+
+    """
+    type_of_workpiece = None
+    type_of_workpiece = input_check(type_of_workpiece, 'str', 'x in (квадратное, круглое)',
+                                    'Введите тип сечения (круглое, квадратное):', 'Данные некорректны, повторите ввод.')
+
+    m = None
+    m = input_check(m, 'float', 'x > 0', 'Введите массу заготовки:', 'Данные некорректны, повторите ввод')
+
+    elements = {'metals': ['Серебро', 'Медь', 'Платина', 'Бронза', 'Латунь', 'Золото 375', 'Золото 585', 'Золото 750'],
+                'p': [10.36, 8.92, 21.45, 8.8, 8.6, 11.54, 13.6, 15.45],
+                'code': ['ar', 'c', 'p', 'b', 'l', 'au1', 'au2', 'au3']}
+    print('Металлы и их коды, представленные в скобках:\n')
+    for i in range(len(elements['code'])):
+        print(elements['metals'][i], '(%s)' % elements['code'][i])
+
+    while True:
+        try:
+            element = input('Введите код металла металла проволоки:')
+            if elements['code'].count(element) != 0:  
+                break
+            else:
+                raise ValueError
+        except ValueError:
+            print('Код металла не распознан, повторите ввод.')
+
+    if type_of_workpiece == 'квадратное':
+
+        b = None
+        b = input_check(b, 'float', 'x > 0', 'Введите ширину заготовки:', 'Данные некорректны, повторите ввод')
+
+        h = None
+        h = input_check(h, 'float', 'x > 0', 'Введите высоту завготовки:', 'Данные некорректны, повторите ввод')
+
+        print('Длина проволоки равна:', '%.3f' % (m / elements['p'][elements['code'].index(element)]) / (b * h))
+        return (m / elements['p'][elements['code'].index(element)]) / (b * h)
+
+    if type_of_workpiece == 'круглое':
+        d = None
+        d = input_check(d, 'float', 'x > 0', 'Введите диаметр заготовки:', 'Данные некорректны, повторите ввод')
+
+        r = d / 2
+
+        print('Длина проволоки равна:', '%.3f' % (m / elements['p'][elements['code'].index(element)]) / (math.pi * r ^ 2))
+        return (m / elements['p'][elements['code'].index(element)]) / (math.pi * r ** 2)
+
+
 print('Вас приветствует самопальная программа выполненная двумя энтузиастами.\n',
       'Выберите цифру, которая соответсвует вашему выбору.\n',
        '1. Узнать длину заготовки(кольца).\n',
