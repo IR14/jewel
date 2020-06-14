@@ -179,3 +179,7 @@ if num == 1:
     length = workpiece_length()
 elif num == 2:
     weigth = wax_weight()
+elif num == 3:
+    wire = wire()
+elif num == 4:
+    plate = plate()
