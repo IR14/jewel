@@ -69,7 +69,7 @@ def wax_weight():
     # но вместо обычного 0 нам нужно запихнуть индекс кода, т.к. по индексу кода можно узнать и вес, и металл
     # elements['code'].index(element) - вернет индекс element в списке elements['code']
     # значит elements['weight'][elements['code'].index(element)] - это удельная плотность введенного металла
-    print('\nМасса металла, требуемая на определенную восковку:', '%.2f' % (wax * elements['weight'][elements['code'].index(element)]))
+    print('\nМасса металла, требуемая на определенную восковку: %.2f' % (wax * elements['weight'][elements['code'].index(element)]))
     return (wax * elements['weight'][elements['code'].index(element)]) # о да, сама гениальность
 
 
@@ -85,7 +85,7 @@ def wax_weight():
 
     """
     type_of_workpiece = None
-    type_of_workpiece = input_check(type_of_workpiece, 'str', 'x in (квадратное, круглое)',
+    type_of_workpiece = input_check(type_of_workpiece, 'str', "x in ('квадратное', 'круглое')",
                                     'Введите тип сечения (круглое, квадратное):', 'Данные некорректны, повторите ввод.')
 
     m = None
@@ -116,7 +116,7 @@ def wax_weight():
         h = None
         h = input_check(h, 'float', 'x > 0', 'Введите высоту завготовки:', 'Данные некорректны, повторите ввод')
 
-        print('Длина проволоки равна:', '%.3f' % (m / elements['p'][elements['code'].index(element)]) / (b * h))
+        print('Длина проволоки равна: %.3f' % (m / elements['p'][elements['code'].index(element)]) / (b * h))
         return (m / elements['p'][elements['code'].index(element)]) / (b * h)
 
     if type_of_workpiece == 'круглое':
@@ -125,8 +125,8 @@ def wax_weight():
 
         r = d / 2
 
-        print('Длина проволоки равна:', '%.3f' % (m / elements['p'][elements['code'].index(element)]) / (math.pi * r ^ 2))
-        return (m / elements['p'][elements['code'].index(element)]) / (math.pi * r ** 2)
+        print('Длина проволоки равна: %.3f' % ((m / elements['p'][elements['code'].index(element)]) / (3.1416 * r ** 2))) 
+        return ((m / elements['p'][elements['code'].index(element)]) / (3.1416 * r ** 2))
     
     def plate():
     """
@@ -160,8 +160,8 @@ def wax_weight():
     m = None
     m = input_check(m, 'float', 'x > 0', 'Введите массу пластины:', 'Данные некорректны, повторите ввод')
 
-    print('Высота пластины:', '%.3f' % (m / elements['p'][elements['code'].index(element)] / l * b))
-    return (m / elements['p'][elements['code'].index(element)] / l * b)
+    print('Высота пластины: %.3f' % ((m / elements['p'][elements['code'].index(element)] / l * b)))
+    return ((m / elements['p'][elements['code'].index(element)] / l * b))
 
 
 print('Вас приветствует самопальная программа выполненная двумя энтузиастами.\n',
