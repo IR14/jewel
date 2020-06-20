@@ -73,7 +73,7 @@ def wax_weight():
     return (wax * elements['weight'][elements['code'].index(element)]) # о да, сама гениальность
 
 
-    def wire():
+def wire():
     """
     Ввод с клавиатруы:
     1. Выбор сечения
@@ -128,7 +128,7 @@ def wax_weight():
         print('Длина проволоки равна: %.3f' % ((m / elements['p'][elements['code'].index(element)]) / (3.1416 * r ** 2))) 
         return ((m / elements['p'][elements['code'].index(element)]) / (3.1416 * r ** 2))
     
-    def plate():
+def plate():
     """
     1. Ввод рамеров пластины(ширина (b), длина (l), высота(h))
     2. Ввод итоговой ширины и длины до которых будет прокатываться пластина.
