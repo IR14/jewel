@@ -35,9 +35,9 @@ def workpiece_length():
 
     length = (3.1416 * (diameter_inner + height)) # берем средний диаметр из расчета погрешности
     print('Длина вашей заготовки равна: %.3f мм' % length)
-    return l
+    return length
 
-def wax_weight():
+def wax_mass():
     """
     Input:
         1. Вес восковки (мастер модели)
@@ -49,7 +49,7 @@ def wax_weight():
     weight = input_check(weight, 'float', 'x > 0', 'Введите вес мастер модели:', 'Данные некорректны, повторите ввод.')
     
     elements = {'metals': ['Серебро', 'Медь', 'Платина', 'Бронза', 'Латунь', 'Золото 375', 'Золото 585', 'Золото 750'],
-                'weight': [11, 8.93, 21.45, 8.9, 8.5, 11.5, 14, 17],
+                'density': [11, 8.93, 21.45, 8.9, 8.5, 11.5, 14, 17],
                 'code': ['ar', 'c', 'p', 'b', 'l', 'au1', 'au2', 'au3']}
     
     print('\nМеталлы и их коды, представленные в скобках:\n')
@@ -66,7 +66,7 @@ def wax_weight():
         except ValueError:
             print('Код металла не распознан, повторите ввод.')
     
-    mass = weight * elements['weight'][elements['code'].index(element)]
+    mass = weight * elements['density'][elements['code'].index(element)]
     print('\nМасса металла, требуемая на определенную восковку: %.2f' % mass)
     return mass
 
@@ -114,17 +114,18 @@ def wire():
 
         metric_2 = None
         metric_2 = input_check(metric_2, 'float', 'x > 0', 'Введите 2-ой известный размер заготовки:', 'Данные некорректны, повторите ввод.')
-
-        print('Длина проволоки равна: %.3f' % ((mass / elements['density'][elements['code'].index(element)]) / (metric_1 * metric_2)))
-        return ((mass / elements['density'][elements['code'].index(element)]) / (metric_1 * metric_2))
+        
+        length = (mass / elements['density'][elements['code'].index(element)]) / (metric_1 * metric_2)
 
     else:
         
         metric_1 = None
         metric_1 = input_check(metric_1, 'float', 'x > 0', 'Введите диаметр заготовки:', 'Данные некорректны, повторите ввод.')
-
-        print('Длина проволоки равна: %.3f' % ((mass / elements['density'][elements['code'].index(element)]) / (3.1416 * (metric_1 / 2) ** 2))) 
-        return ((mass / elements['density'][elements['code'].index(element)]) / (3.1416 * (metric_1 / 2) ** 2))
+        
+        length = (mass / elements['density'][elements['code'].index(element)]) / (3.1416 * (metric_1 / 2) ** 2)
+        
+    print('Длина проволоки равна: %.3f' % length)
+    return length
     
 def plate():
     """
@@ -271,7 +272,7 @@ num = input_check(num, 'int', 'x in (1, 2, 3, 4)',
 if num == 1:
     length = workpiece_length()
 elif num == 2:
-    weigth = wax_weight()
+    weigth = wax_mass()
 elif num == 3:
     wire = wire()
 elif num == 4:
