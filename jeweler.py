@@ -156,7 +156,7 @@ def plate():
     metric_1 = None
     metric_1 = input_check(metric_1, 'float', 'x > 0', 'Введите 1-ый известный размер пластины:', 'Данные некорректны, повторите ввод.')
 
-    metric_1 = None
+    metric_2 = None
     metric_2 = input_check(metric_2, 'float', 'x > 0', 'Введите 2-ой известный размер пластины:', 'Данные некорректны, повторите ввод.')
 
     mass = None
