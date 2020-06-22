@@ -7,4 +7,3 @@ This python project have to create the program and the valuable app later for je
 - [ ] Сalculation of the number of precious stones which can be suitable for the ring according to the specified parameters
 - [ ] Visual representation of the ring's layout
 - [ ] Figure out what to do else :3
-
