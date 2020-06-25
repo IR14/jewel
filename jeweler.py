@@ -127,6 +127,7 @@ def wire():
     print('Длина проволоки равна: %.3f' % length)
     return length
     
+    
 def plate():
     """
     Input:
@@ -166,6 +167,33 @@ def plate():
     print('Неизвестный 3-ий размер пластины: %.3f' % metric_3)
     print('3-ий размер - это высота, если были введены ширина и длина и т.д.')
     return metric_3
+
+def ring(finger_size, height_workpiece, diameter_stone, code, num):
+    """
+        def ring() выдает риунок кольца по параметрам с функции def jam()
+        В 2D > 3D формате.
+        finger_size это диаметр, не радиус, глупышка.
+    """
+    circle_inner = plt.Circle((0, 0), 0.5 * finger_size, fill=False, color='pink', linewidth=2)
+    circle_outer = plt.Circle((0, 0), 0.5 * finger_size + height_workpiece, fill=False, color='pink', linewidth=2)
+
+    fig, ax = plt.subplots()
+
+    plt.xlim(-0.5 * finger_size - 2 * height_workpiece, 0.5 * finger_size + 2 * height_workpiece)
+    plt.ylim(-0.5 * finger_size - 2 * height_workpiece, 0.5 * finger_size + 2 * height_workpiece)
+
+    ax.set_aspect(1)
+
+    plt.grid(linestyle='--')
+
+    for i in range(num % 2 + num // 2):
+        pass
+
+    ax.add_artist(circle_inner)
+    ax.add_artist(circle_outer)
+
+    plt.show()
+
 
 def gems():
     """
