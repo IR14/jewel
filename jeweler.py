@@ -168,6 +168,7 @@ def plate():
     print('3-ий размер - это высота, если были введены ширина и длина и т.д.')
     return metric_3
 
+
 def ring(finger_size, height_workpiece, diameter_stone, code, num):
     """
         def ring() выдает риунок кольца по параметрам с функции def jam()
@@ -186,15 +187,44 @@ def ring(finger_size, height_workpiece, diameter_stone, code, num):
 
     plt.grid(linestyle='--')
 
+    coordinates = {'x': [], 'y': []}
+
     for i in range(num % 2 + num // 2):
-        pass
+        if i == 0:
+            if num % 2:
+                alpha = code * np.pi / 4
+                if code != 4:
+                    beta = alpha * ((num - 1) / 2 + 1)
+                else:
+                    beta = 2 * np.pi / num
+                coordinates['x'].append((0.5 * finger_size + height_workpiece) * np.cos(alpha))
+                coordinates['y'].append((0.5 * finger_size + height_workpiece) * np.sin(alpha))
+            else:
+                if code != 4:
+                    beta = 0.5 * (code * np.pi) / (num + 1)
+                else:
+                    beta = 0.5 * (code * np.pi) / num
+                coordinates['x'].append((0.5 * finger_size + height_workpiece) * np.cos(code * np.pi / 4 + 0.5 * beta))
+                coordinates['y'].append((0.5 * finger_size + height_workpiece) * np.sin(code * np.pi / 4 + 0.5 * beta))
+                alpha = code * np.pi / 4 - 0.5 * beta
+                coordinates['x'].append((0.5 * finger_size + height_workpiece) * np.cos(alpha))
+                coordinates['y'].append((0.5 * finger_size + height_workpiece) * np.sin(alpha))
+        else:
+            alpha -= beta
+            coordinates['x'].append((0.5 * finger_size + height_workpiece) * np.cos(alpha))
+            coordinates['y'].append((0.5 * finger_size + height_workpiece) * np.sin(alpha))
+            coordinates['x'].append((0.5 * finger_size + height_workpiece) * np.cos(code * np.pi / 2 - alpha))
+            coordinates['y'].append((0.5 * finger_size + height_workpiece) * np.sin(code * np.pi / 2 - alpha))
+
+    for i in range(len(coordinates['x'])):
+        ax.plot(coordinates['x'][i], coordinates['y'][i], 'bo')
 
     ax.add_artist(circle_inner)
     ax.add_artist(circle_outer)
 
     plt.show()
 
-
+    
 def gems():
     """
     ЕСЛИ НИГДЕ НЕ ЮЗАЕМ ПАРАМЕТРЫ ФУНКЦИИ workpiece_length, то заменить их на вызов функции
