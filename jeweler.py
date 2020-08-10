@@ -171,9 +171,14 @@ def plate():
 
 def ring(finger_size, height_workpiece, diameter_stone, code, num):
     """
-        def ring() выдает риунок кольца по параметрам с функции def jam()
-        В 2D > 3D формате.
-        finger_size это диаметр, не радиус, глупышка.
+    Input:
+        1. Размер кольца (пальца) (не радиус, а диаметр)
+        2. Высота заготовки
+        3. Диаметр инкрустированного камня
+        4. Область посадки камней на кольце
+        5. Количество камней
+    Output:
+        1. Рисунок кольца по заданным параметрам
     """
     circle_inner = plt.Circle((0, 0), 0.5 * finger_size, fill=False, color='pink', linewidth=2)
     circle_outer = plt.Circle((0, 0), 0.5 * finger_size + height_workpiece, fill=False, color='pink', linewidth=2)
@@ -187,16 +192,16 @@ def ring(finger_size, height_workpiece, diameter_stone, code, num):
 
     plt.grid(linestyle='--')
 
-    coordinates = {'x': [], 'y': []}
+    coordinates = {'x':[], 'y':[]}
 
     for i in range(num % 2 + num // 2):
         if i == 0:
             if num % 2:
                 alpha = code * np.pi / 4
                 if code != 4:
-                    beta = alpha * ((num - 1) / 2 + 1)
+                    beta = 2*alpha/(num+1)
                 else:
-                    beta = 2 * np.pi / num
+                    beta = 2*np.pi / num
                 coordinates['x'].append((0.5 * finger_size + height_workpiece) * np.cos(alpha))
                 coordinates['y'].append((0.5 * finger_size + height_workpiece) * np.sin(alpha))
             else:
@@ -204,9 +209,9 @@ def ring(finger_size, height_workpiece, diameter_stone, code, num):
                     beta = 0.5 * (code * np.pi) / (num + 1)
                 else:
                     beta = 0.5 * (code * np.pi) / num
-                coordinates['x'].append((0.5 * finger_size + height_workpiece) * np.cos(code * np.pi / 4 + 0.5 * beta))
-                coordinates['y'].append((0.5 * finger_size + height_workpiece) * np.sin(code * np.pi / 4 + 0.5 * beta))
-                alpha = code * np.pi / 4 - 0.5 * beta
+                coordinates['x'].append((0.5 * finger_size + height_workpiece) * np.cos(code * np.pi / 4 + 0.5*beta))
+                coordinates['y'].append((0.5 * finger_size + height_workpiece) * np.sin(code * np.pi / 4 + 0.5*beta))
+                alpha = code * np.pi / 4 - 0.5*beta
                 coordinates['x'].append((0.5 * finger_size + height_workpiece) * np.cos(alpha))
                 coordinates['y'].append((0.5 * finger_size + height_workpiece) * np.sin(alpha))
         else:
