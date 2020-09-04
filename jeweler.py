@@ -230,25 +230,26 @@ def ring(finger_size, height_workpiece, diameter_stone, code, num):
     plt.show()
 
     
-def gems(length, flag_height_workpiece, flag_diameter_stone, flag_code, flag_num):
+def gems(length, flag_height_workpiece, flag_diameter_stone, flag_code, flag_num, finger_size, height_workpiece,
+         diameter_stone, code):
     if not length:
         finger_size = None
         finger_size = input_check(finger_size, 'float', 'x > 0',
                                   'Введите размер кольца:',
                                   'Данные некорректны, повторите ввод.')
-        
+
     if flag_height_workpiece or not length:
         if not length:
             height_workpiece = None
         height_workpiece = input_check(height_workpiece, 'float', 'x > 0',
                                        'Введите высоту шинки:',
                                        'Данные некорректны, повторите ввод.')
-        
+
     if flag_diameter_stone or not length:
         if not length:
             diameter_stone = None
         diameter_stone = input_check(diameter_stone, 'float', 'x > 0',
-                                     'Введите даметр камушка:',
+                                     'Введите диаметр камушка:',
                                      'Данные некорректны, повторите ввод.')
 
     if flag_code or not length:
@@ -268,11 +269,13 @@ def gems(length, flag_height_workpiece, flag_diameter_stone, flag_code, flag_num
         length = code / 4 * 3.1416 * (finger_size + height_workpiece)
 
     max_num = round((length + 0.2) / (
-        diameter_stone + 0.2))  # (всегда будет измен. если изм. друг. парм.)максимальное кол-во камней для функции ring()
-    # num =  #текущ num
+            diameter_stone + 0.2))  # (всегда будет измен. если изм. друг. парм.)максимальное кол-во камней для функции ring()
 
-    ring(finger_size, height_workpiece, diameter_stone, code, num)
-    
+    if not flag_num:
+        ring(finger_size, height_workpiece, diameter_stone, code, max_num)
+    else:
+        ring(finger_size, height_workpiece, diameter_stone, code, flag_num)
+
     flag_height_workpiece, flag_diameter_stone, flag_code, flag_num = False, False, False, False
 
     print('Выберите дальнейшие действия.\n',
@@ -289,28 +292,38 @@ def gems(length, flag_height_workpiece, flag_diameter_stone, flag_code, flag_num
     choose = input_check(choose, 'int', 'x in (1, 2, 3, 4, 5, 12, 13, 14, 23, 24, 34, 123, 124, 234, 1234)',
                          'Ввведите цифру:',
                          'Данные некорректны, повторите ввод.')
-    
-    if choose.find('5') != -1:
-        break
-    
-    if choose.find('1') != -1:
-        flag_height_workpiece = True
-        
-    if choose.find('2') != -1:
-        flag_diameter_stone = True
-    
-    if choose.find('3') != -1:
-        flag_code = True
-        
-    # переработать всё нахрен, flag_num это значение камней, меньшее, чем max_num, а не флаг bool'а  
-    if choose.find('4') != -1:
-        if not flag_num:
-            flag_num = None
-        flag_num = input_check(flag_num, 'int', 'x > 0 and x < max_num',
-                                       'Введите количество камней:',
-                                       'Данные некорректны, повторите ввод.')
-    
-    gems(length, flag_height_workpiece, flag_diameter_stone, flag_code, flag_num)
+
+    if str(choose).find('5') == -1:
+
+        if str(choose).find('1') != -1:
+            flag_height_workpiece = True
+
+        if str(choose).find('2') != -1:
+            flag_diameter_stone = True
+
+        if str(choose).find('3') != -1:
+            flag_code = True
+
+        if str(choose).find('4') != -1:
+            if not flag_num:
+                flag_num = None
+                while True:
+                    try:
+                        flag_num = int(
+                            (input('Введите новое количество камней, которое находится в промежутке от 1 до %d:'
+                                   % (max_num - 1))))
+                        if (flag_num > 0) and (flag_num < max_num):
+                            gems(length, flag_height_workpiece, flag_diameter_stone, flag_code, flag_num, finger_size,
+                                 height_workpiece, diameter_stone, code)
+                            return flag_num
+                        else:
+                            raise ValueError
+                    except ValueError:
+                        print('Данные некорректны, повторите ввод.')
+
+        gems(length, flag_height_workpiece, flag_diameter_stone, flag_code, flag_num, finger_size, height_workpiece,
+                    diameter_stone, code)
+
 
 print('Вас приветствует самопальная программа выполненная двумя энтузиастами.\n',
       'Выберите цифру, которая соответсвует вашему выбору.\n',
