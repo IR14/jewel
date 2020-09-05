@@ -222,7 +222,7 @@ def ring(finger_size, height_workpiece, diameter_stone, code, num):
             coordinates['y'].append((0.5 * finger_size + height_workpiece) * np.sin(code * np.pi / 2 - alpha))
 
     for i in range(len(coordinates['x'])):
-        ax.plot(coordinates['x'][i], coordinates['y'][i], 'bo')
+        ax.add_artist(plt.Circle((coordinates['x'][i], coordinates['y'][i]), 0.5 * diameter_stone, fill=True, color='salmon', linewidth=None))
 
     ax.add_artist(circle_inner)
     ax.add_artist(circle_outer)
