@@ -313,9 +313,7 @@ def gems(length, flag_height_workpiece, flag_diameter_stone, flag_code, flag_num
                             (input('Введите новое количество камней, которое находится в промежутке от 1 до %d:'
                                    % (max_num - 1))))
                         if (flag_num > 0) and (flag_num < max_num):
-                            gems(length, flag_height_workpiece, flag_diameter_stone, flag_code, flag_num, finger_size,
-                                 height_workpiece, diameter_stone, code)
-                            return flag_num
+                            break
                         else:
                             raise ValueError
                     except ValueError:
