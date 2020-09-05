@@ -248,9 +248,16 @@ def gems(length, flag_height_workpiece, flag_diameter_stone, flag_code, flag_num
     if flag_diameter_stone or not length:
         if not length:
             diameter_stone = None
-        diameter_stone = input_check(diameter_stone, 'float', 'x > 0',
-                                     'Введите диаметр камушка:',
-                                     'Данные некорректны, повторите ввод.')
+        while True:
+            try:
+                diameter_stone = float((input('Введите диаметр камушка, который находится в промежутке от 0.5 до %f:' 
+                                              % (2*(height_workpiece - 0.8)))))
+                if (diameter_stone >= 0.5) and (diameter_stone <= 2*(height_workpiece - 0.8)):
+                    break
+                else:
+                    raise ValueError
+            except ValueError:
+                print('Данные некорректны, повторите ввод.')
 
     if flag_code or not length:
         print('Выберите область посадки камней.\n',
