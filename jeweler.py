@@ -169,60 +169,50 @@ def plate():
     return metric_3
 
 
-def ring(finger_size, height_workpiece, diameter_stone, code, num):
+def ring(finger_size, height_workpiece, diameter_stone, code, num, distance):
     """
     Input:
-        1. Размер кольца (пальца) (не радиус, а диаметр)
+        1. Размер кольца (пальца) (диаметр)
         2. Высота заготовки
         3. Диаметр инкрустированного камня
         4. Область посадки камней на кольце
         5. Количество камней
+        6. Расстояние между камнями
     Output:
         1. Рисунок кольца по заданным параметрам
     """
-    circle_inner = plt.Circle((0, 0), 0.5 * finger_size, fill=False, color='pink', linewidth=2)
-    circle_outer = plt.Circle((0, 0), 0.5 * finger_size + height_workpiece, fill=False, color='pink', linewidth=2)
+    circle_inner = plt.Circle((0, 0), .5 * finger_size, fill=False, color='pink', linewidth=2)
+    circle_outer = plt.Circle((0, 0), .5 * finger_size + height_workpiece, fill=False, color='pink', linewidth=2)
 
     fig, ax = plt.subplots()
 
-    plt.xlim(-0.5 * finger_size - 2 * height_workpiece, 0.5 * finger_size + 2 * height_workpiece)
-    plt.ylim(-0.5 * finger_size - 2 * height_workpiece, 0.5 * finger_size + 2 * height_workpiece)
+    plt.xlim(-.5 * finger_size - 2 * height_workpiece, .5 * finger_size + 2 * height_workpiece)
+    plt.ylim(-.5 * finger_size - 2 * height_workpiece, .5 * finger_size + 2 * height_workpiece)
 
     ax.set_aspect(1)
 
     plt.grid(linestyle='--')
 
-    coordinates = {'x':[], 'y':[]}
+    coordinates = {'x': [], 'y': []}
 
-    for i in range(num % 2 + num // 2):
-        if i == 0:
-            if num % 2:
-                alpha = code * np.pi / 4
-                if code != 4:
-                    beta = 2*alpha/(num+1)
-                else:
-                    beta = 2*np.pi / num
-                coordinates['x'].append((0.5 * finger_size + height_workpiece) * np.cos(alpha))
-                coordinates['y'].append((0.5 * finger_size + height_workpiece) * np.sin(alpha))
-            else:
-                if code != 4:
-                    beta = 0.5 * (code * np.pi) / (num + 1)
-                else:
-                    beta = 0.5 * (code * np.pi) / num
-                coordinates['x'].append((0.5 * finger_size + height_workpiece) * np.cos(code * np.pi / 4 + 0.5*beta))
-                coordinates['y'].append((0.5 * finger_size + height_workpiece) * np.sin(code * np.pi / 4 + 0.5*beta))
-                alpha = code * np.pi / 4 - 0.5*beta
-                coordinates['x'].append((0.5 * finger_size + height_workpiece) * np.cos(alpha))
-                coordinates['y'].append((0.5 * finger_size + height_workpiece) * np.sin(alpha))
-        else:
-            alpha -= beta
-            coordinates['x'].append((0.5 * finger_size + height_workpiece) * np.cos(alpha))
-            coordinates['y'].append((0.5 * finger_size + height_workpiece) * np.sin(alpha))
-            coordinates['x'].append((0.5 * finger_size + height_workpiece) * np.cos(code * np.pi / 2 - alpha))
-            coordinates['y'].append((0.5 * finger_size + height_workpiece) * np.sin(code * np.pi / 2 - alpha))
+    alpha = .5 * np.pi * code - np.arccos(
+        point(.5 * finger_size + height_workpiece, .5 * diameter_stone) / (.5 * finger_size + height_workpiece))
+
+    beta = np.arccos(point(.5 * finger_size + height_workpiece, .5 * distance) / (
+            .5 * finger_size + height_workpiece)) - 2 * alpha + np.pi * code
+
+    for i in range(num):
+        coordinates['x'].append((.5 * finger_size + height_workpiece) * np.cos(alpha))
+        coordinates['y'].append((.5 * finger_size + height_workpiece) * np.sin(alpha))
+        alpha -= beta
 
     for i in range(len(coordinates['x'])):
-        ax.add_artist(plt.Circle((coordinates['x'][i], coordinates['y'][i]), 0.5 * diameter_stone, fill=True, color='salmon', linewidth=None))
+        ax.add_artist(
+            plt.Circle((coordinates['x'][i], coordinates['y'][i]),
+                       .5 * diameter_stone,
+                       fill=True,
+                       color='salmon',
+                       linewidth=0))
 
     ax.add_artist(circle_inner)
     ax.add_artist(circle_outer)
@@ -230,8 +220,8 @@ def ring(finger_size, height_workpiece, diameter_stone, code, num):
     plt.show()
 
     
-def gems(length, flag_height_workpiece, flag_diameter_stone, flag_code, flag_num, finger_size, height_workpiece,
-         diameter_stone, code):
+def gems(length, flag_height_workpiece, flag_diameter_stone, flag_code, flag_num, flag_distance, finger_size,
+         height_workpiece, diameter_stone, distance, code):
     if not length:
         finger_size = None
         finger_size = input_check(finger_size, 'float', 'x > 0',
@@ -246,18 +236,23 @@ def gems(length, flag_height_workpiece, flag_diameter_stone, flag_code, flag_num
                                        'Данные некорректны, повторите ввод.')
 
     if flag_diameter_stone or not length:
-        if not length:
-            diameter_stone = None
         while True:
             try:
-                diameter_stone = float((input('Введите диаметр камушка, который находится в промежутке от 0.5 до %f:' 
-                                              % (2*(height_workpiece - 0.8)))))
-                if (diameter_stone >= 0.5) and (diameter_stone <= 2*(height_workpiece - 0.8)):
+                diameter_stone = float((input('Введите диаметр камушка, который находится в промежутке от 0.5 до %f:'
+                                              % (2 * (height_workpiece - .8)))))
+                if (diameter_stone >= .5) and (diameter_stone <= 2 * (height_workpiece - .8)):
                     break
                 else:
                     raise ValueError
             except ValueError:
                 print('Данные некорректны, повторите ввод.')
+
+    if flag_distance or not length:
+        if not length:
+            distance = None
+        distance = input_check(distance, 'float', 'x >= .2',
+                               'Введите расстояние между камнями, минимально значение это 0.2 (Количество камней может измениться!):',
+                               'Данные некорректны, повторите ввод.')
 
     if flag_code or not length:
         print('Выберите область посадки камней.\n',
@@ -273,17 +268,17 @@ def gems(length, flag_height_workpiece, flag_diameter_stone, flag_code, flag_num
                            'Данные некорректны, повторите ввод.')
 
     if flag_code or flag_height_workpiece or not length:
-        length = code / 4 * 3.1416 * (finger_size + height_workpiece)
+        length = code / 2 * np.pi * (.5 * finger_size + height_workpiece)
 
-    max_num = round((length + 0.2) / (
-            diameter_stone + 0.2))  # (всегда будет измен. если изм. друг. парм.)максимальное кол-во камней для функции ring()
+    max_num = round(length / (diameter_stone + distance))
+    # (всегда будет измен. если изм. друг. парм.)максимальное кол-во камней для функции ring()
 
     if not flag_num:
-        ring(finger_size, height_workpiece, diameter_stone, code, max_num)
+        ring(finger_size, height_workpiece, diameter_stone, code, max_num, distance)
     else:
-        ring(finger_size, height_workpiece, diameter_stone, code, flag_num)
+        ring(finger_size, height_workpiece, diameter_stone, code, flag_num, distance)
 
-    flag_height_workpiece, flag_diameter_stone, flag_code, flag_num = False, False, False, False
+    flag_height_workpiece, flag_diameter_stone, flag_code, flag_num, flag_distance = False, False, False, False, False
 
     print('Выберите дальнейшие действия.\n',
           'Вы можете выбрать комбинацию действий, например, чтобы одновременно изменить высоту заготовки и область посадки камней,\
@@ -293,14 +288,16 @@ def gems(length, flag_height_workpiece, flag_diameter_stone, flag_code, flag_num
           '2. Изменить диаметр камня.\n',
           '3. Изменить область посадки камней.\n',
           '4. Изменить количество камней.\n',
-          '5. Выход.\n', sep='')
+          '5. Изменить расстояние между камнями.\n',
+          '6. Выход.\n', sep='')
 
     choose = None
-    choose = input_check(choose, 'int', 'x in (1, 2, 3, 4, 5, 12, 13, 14, 23, 24, 34, 123, 124, 234, 1234)',
+    choose = input_check(choose, 'int',
+                         'x in (1, 2, 3, 4, 5, 6, 12, 13, 14, 15, 23, 24, 25, 34, 35, 45, 123, 124, 125, 134, 135, 145, 234, 235, 245, 345, 1234, 1235, 1245, 1345, 2345, 12345)',
                          'Ввведите цифру:',
                          'Данные некорректны, повторите ввод.')
 
-    if str(choose).find('5') == -1:
+    if str(choose).find('6') == -1:
 
         if str(choose).find('1') != -1:
             flag_height_workpiece = True
@@ -326,8 +323,11 @@ def gems(length, flag_height_workpiece, flag_diameter_stone, flag_code, flag_num
                     except ValueError:
                         print('Данные некорректны, повторите ввод.')
 
-        gems(length, flag_height_workpiece, flag_diameter_stone, flag_code, flag_num, finger_size, height_workpiece,
-                    diameter_stone, code)
+        if str(choose).find('5') != -1:
+            flag_distance = True
+
+        gems(length, flag_height_workpiece, flag_diameter_stone, flag_code, flag_num, flag_distance, finger_size,
+             height_workpiece, diameter_stone, distance, code)
 
 
 print('Вас приветствует самопальная программа выполненная двумя энтузиастами.\n',
