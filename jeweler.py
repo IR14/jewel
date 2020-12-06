@@ -1,3 +1,6 @@
+import matplotlib.pyplot as plt
+import numpy as np
+
 def input_check(x, type_x, condition, input_txt, err_txt):
     """
     Input:
@@ -19,7 +22,8 @@ def input_check(x, type_x, condition, input_txt, err_txt):
         except ValueError:
             print(err_txt)
 
-def workpiece_length():      
+
+def workpiece_length():
     """
     Input:
         1. Внутренний диаметр кольца (размер кольца)
@@ -28,14 +32,17 @@ def workpiece_length():
         1. Длина заготовки
     """
     diameter_inner = None
-    diameter_inner = input_check(diameter_inner, 'float', 'x > 0', 'Введите размер кольца:', 'Данные некорректны, повторите ввод.')
-    
-    height = None
-    height = input_check(height, 'float', 'x > 0', 'Введите толщину вашей заготовки в мм:', 'Данные некорректны, повторите ввод.')
+    diameter_inner = input_check(diameter_inner, 'float', 'x > 0', 'Введите размер кольца:',
+                                 'Данные некорректны, повторите ввод.')
 
-    length = (3.1416 * (diameter_inner + height)) # берем средний диаметр из расчета погрешности
+    height = None
+    height = input_check(height, 'float', 'x > 0', 'Введите толщину вашей заготовки в мм:',
+                         'Данные некорректны, повторите ввод.')
+
+    length = (3.1416 * (diameter_inner + height))  # берем средний диаметр из расчета погрешности
     print('Длина вашей заготовки равна: %.3f мм' % length)
     return length
+
 
 def wax_mass():
     """
@@ -47,11 +54,11 @@ def wax_mass():
     """
     weight = None
     weight = input_check(weight, 'float', 'x > 0', 'Введите вес мастер модели:', 'Данные некорректны, повторите ввод.')
-    
+
     elements = {'metals': ['Серебро', 'Медь', 'Платина', 'Бронза', 'Латунь', 'Золото 375', 'Золото 585', 'Золото 750'],
                 'weight_specific': [11, 8.93, 21.45, 8.9, 8.5, 11.5, 14, 17],
                 'code': ['ar', 'c', 'p', 'b', 'l', 'au1', 'au2', 'au3']}
-    
+
     print('\nМеталлы и их коды, представленные в скобках:\n')
     for i in range(len(elements['code'])):
         print(elements['metals'][i], '(%s)' % elements['code'][i])
@@ -65,10 +72,11 @@ def wax_mass():
                 raise ValueError
         except ValueError:
             print('Код металла не распознан, повторите ввод.')
-    
+
     mass = weight * elements['weight_specific'][elements['code'].index(element)]
     print('\nМасса металла, требуемая на определенную восковку: %.2f' % mass)
     return mass
+
 
 def wire():
     """
@@ -82,9 +90,9 @@ def wire():
         1.2. Максимальная возможная длина проволоки для круглого сечения
     """
     type_of_workpiece = None
-    type_of_workpiece = input_check(type_of_workpiece, 'int', 'x in (1, 2)', 
-                      'Выберите цифру, которая соответсвует вашему выбору:\n1. Квадратное сечение.\n2. Круглое сечение.\n',
-                      'Данные некорректны, повторите ввод.')
+    type_of_workpiece = input_check(type_of_workpiece, 'int', 'x in (1, 2)',
+                                    'Выберите цифру, которая соответсвует вашему выбору:\n1. Квадратное сечение.\n2. Круглое сечение.\n',
+                                    'Данные некорректны, повторите ввод.')
 
     mass = None
     mass = input_check(mass, 'float', 'x > 0', 'Введите массу заготовки:', 'Данные некорректны, повторите ввод')
@@ -92,7 +100,7 @@ def wire():
     elements = {'metals': ['Серебро', 'Медь', 'Платина', 'Бронза', 'Латунь', 'Золото 375', 'Золото 585', 'Золото 750'],
                 'density': [10.36, 8.92, 21.45, 8.8, 8.6, 11.54, 13.6, 15.45],
                 'code': ['ar', 'c', 'p', 'b', 'l', 'au1', 'au2', 'au3']}
-    
+
     print('\nМеталлы и их коды, представленные в скобках:\n')
     for i in range(len(elements['code'])):
         print(elements['metals'][i], '(%s)' % elements['code'][i])
@@ -100,7 +108,7 @@ def wire():
     while True:
         try:
             element = input('Введите код металла металла проволоки:')
-            if elements['code'].count(element) != 0:  
+            if elements['code'].count(element) != 0:
                 break
             else:
                 raise ValueError
@@ -110,24 +118,27 @@ def wire():
     if type_of_workpiece == 1:
 
         metric_1 = None
-        metric_1 = input_check(metric_1, 'float', 'x > 0', 'Введите 1-ый известный размер заготовки:', 'Данные некорректны, повторите ввод.')
+        metric_1 = input_check(metric_1, 'float', 'x > 0', 'Введите 1-ый известный размер заготовки:',
+                               'Данные некорректны, повторите ввод.')
 
         metric_2 = None
-        metric_2 = input_check(metric_2, 'float', 'x > 0', 'Введите 2-ой известный размер заготовки:', 'Данные некорректны, повторите ввод.')
-        
+        metric_2 = input_check(metric_2, 'float', 'x > 0', 'Введите 2-ой известный размер заготовки:',
+                               'Данные некорректны, повторите ввод.')
+
         length = (mass / elements['density'][elements['code'].index(element)]) / (metric_1 * metric_2)
 
     else:
-        
+
         metric_1 = None
-        metric_1 = input_check(metric_1, 'float', 'x > 0', 'Введите диаметр заготовки:', 'Данные некорректны, повторите ввод.')
-        
+        metric_1 = input_check(metric_1, 'float', 'x > 0', 'Введите диаметр заготовки:',
+                               'Данные некорректны, повторите ввод.')
+
         length = (mass / elements['density'][elements['code'].index(element)]) / (3.1416 * (metric_1 / 2) ** 2)
-        
+
     print('Длина проволоки равна: %.3f' % length)
     return length
-    
-    
+
+
 def plate():
     """
     Input:
@@ -139,7 +150,7 @@ def plate():
     elements = {'metals': ['Серебро', 'Медь', 'Платина', 'Бронза', 'Латунь', 'Золото 375', 'Золото 585', 'Золото 750'],
                 'density': [10.36, 8.92, 21.45, 8.8, 8.6, 11.54, 13.6, 15.45],
                 'code': ['ar', 'c', 'p', 'b', 'l', 'au1', 'au2', 'au3']}
-    
+
     print('\nМеталлы и их коды, представленные в скобках:\n')
     for i in range(len(elements['code'])):
         print(elements['metals'][i], '(%s)' % elements['code'][i])
@@ -147,7 +158,7 @@ def plate():
     while True:
         try:
             element = input('Введите код металла металла пластины:')
-            if elements['code'].count(element) != 0:  
+            if elements['code'].count(element) != 0:
                 break
             else:
                 raise ValueError
@@ -155,10 +166,12 @@ def plate():
             print('Код металла не распознан, повторите ввод.')
 
     metric_1 = None
-    metric_1 = input_check(metric_1, 'float', 'x > 0', 'Введите 1-ый известный размер пластины:', 'Данные некорректны, повторите ввод.')
+    metric_1 = input_check(metric_1, 'float', 'x > 0', 'Введите 1-ый известный размер пластины:',
+                           'Данные некорректны, повторите ввод.')
 
     metric_2 = None
-    metric_2 = input_check(metric_2, 'float', 'x > 0', 'Введите 2-ой известный размер пластины:', 'Данные некорректны, повторите ввод.')
+    metric_2 = input_check(metric_2, 'float', 'x > 0', 'Введите 2-ой известный размер пластины:',
+                           'Данные некорректны, повторите ввод.')
 
     mass = None
     mass = input_check(mass, 'float', 'x > 0', 'Введите массу пластины:', 'Данные некорректны, повторите ввод.')
@@ -167,6 +180,18 @@ def plate():
     print('Неизвестный 3-ий размер пластины: %.3f' % metric_3)
     print('3-ий размер - это высота, если были введены ширина и длина и т.д.')
     return metric_3
+
+
+def point(radius_outer_ring, radius_stone):
+    """
+    Input:
+        1. Радиус внешнего кольца
+        2. Радиус камня для инкрустации
+    Output:
+        1. Высота, относительно центра кольца, на которой расположены пересечения камня с внешним кольцом
+    """
+    return .5 * (2 * radius_outer_ring ** 2 - radius_stone ** 2) / radius_outer_ring
+    # h = (radius_outer_ring ** 2 - a ** 2) ** .5
 
 
 def ring(finger_size, height_workpiece, diameter_stone, code, num, distance):
@@ -219,9 +244,27 @@ def ring(finger_size, height_workpiece, diameter_stone, code, num, distance):
 
     plt.show()
 
-    
+
 def gems(length, flag_height_workpiece, flag_diameter_stone, flag_code, flag_num, flag_distance, finger_size,
          height_workpiece, diameter_stone, distance, code):
+    """
+    Рекурсивная функция обработки параметров для визуализации кольца.
+    Input:
+        1. Длина внешнего кольца
+        2. Флаг изменения высоты заготовки
+        3. Флаг изменения диаметра инкрустированного камня
+        4. Флаг изменения области посадки камней
+        5. Флаг изменения количества камней (и есть их количество)
+        6. Флаг изменения расстояния между камнями
+        7. Размер кольца (пальца) (диаметр)
+        8. Высота заготовки
+        9. Диаметр инкрустированного камня
+        10. Расстояние между камнями
+        11. Область посадки камней на кольце
+    Output:
+        1. Вызов функции визуализации ring по заданным параметрам
+        2. Контроль изменения параметров для повторной визуализации
+    """
     if not length:
         finger_size = None
         finger_size = input_check(finger_size, 'float', 'x > 0',
@@ -330,22 +373,33 @@ def gems(length, flag_height_workpiece, flag_diameter_stone, flag_code, flag_num
              height_workpiece, diameter_stone, distance, code)
 
 
-print('Вас приветствует самопальная программа выполненная двумя энтузиастами.\n',
-      'Выберите цифру, которая соответсвует вашему выбору.\n',
-       '1. Узнать длину заготовки(кольца).\n',
-       '2. Пересчет массы восковки в массу металла.\n',
-       '3. Пересчет массы в длину проволки разных сечений. \n',
-       '4. Толщина пластины при заданных размерах.\n', sep='')
-num = None
-num = input_check(num, 'int', 'x in (1, 2, 3, 4)', 
-                  'Ввведите цифру:',
-                  'Данные некорректны, повторите ввод.')
+print('Вас программа для математических расчетов в повседневных задачач ювелирного мастера.\n')
 
-if num == 1:
-    length = workpiece_length()
-elif num == 2:
-    weigth = wax_mass()
-elif num == 3:
-    wire = wire()
-elif num == 4:
-    plate = plate()
+num = None
+
+while True:
+    print('Выберите цифру, которая соответсвует вашему выбору.\n',
+          '1. Узнать длину заготовки(кольца).\n',
+          '2. Пересчет массы восковки в массу металла.\n',
+          '3. Пересчет массы в длину проволки разных сечений.\n',
+          '4. Толщина пластины при заданных размерах.\n',
+          '5. Визуализировать кольцо.\n',
+          '6. Закончить работу с программой.\n', sep='')
+
+    num = input_check(num, 'int', 'x in (1, 2, 3, 4, 5, 6)',
+                      'Ввведите цифру:',
+                      'Данные некорректны, повторите ввод.')
+    if num == 6:
+        print('Спасибо, что пользуетесь программой. Пока-пока!')
+        break
+    elif num == 1:
+        length = workpiece_length()
+    elif num == 2:
+        weight = wax_mass()
+    elif num == 3:
+        wire = wire()
+    elif num == 4:
+        plate = plate()
+    elif num == 5:
+        gems(length=None, flag_height_workpiece=False, flag_diameter_stone=False, flag_code=False, flag_num=False,
+             flag_distance=False, finger_size=None, height_workpiece = None, diameter_stone = None, distance = None, code = None)
